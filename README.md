@@ -1,2 +1,2 @@
 # ElectiveCourseSystem
-Student elective course system
+vue + webpack + vue-cli + element
