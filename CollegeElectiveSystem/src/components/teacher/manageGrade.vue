@@ -14,11 +14,11 @@
                 <div class="semester">{{item.semester | semester}}</div>
               </div>
               <div class="group">
-                <div class="departmentName">{{item.department}}</div>
+                <div class="departmentName">{{item.departmentName}}</div>
               </div>
               <div class="group">
                 <div class="credit">{{item.credit}}学分</div>
-                <div class="department">{{item.department | department}}</div>
+                <div class="departmentName">{{item.departmentName | departmentName}}</div>
               </div>
             </div>
           </div>
@@ -40,7 +40,7 @@
               </div>
               <div class="group">
                 <div class="credit">{{item.credit}}学分</div>
-                <div class="department">{{item.department | department}}</div>
+                <div class="departmentName">{{item.departmentName | departmentName}}</div>
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@ export default {
   methods: {
     getTeacherCourse() {
       this.axios
-        .get("/getTeacherCourse?id=" + this.$store.state.uid)
+        .get("/getTeacherCourse?teacherID=" + this.$store.state.teacherID)
         .then(res => {
           if (res.data.code == 1) {
             this.courseData = res.data.data;
@@ -74,7 +74,7 @@ export default {
     },
     getTeacherCourseFinished() {
       this.axios
-        .get("/getTeacherCourseFinished?id=" + this.$store.state.uid)
+        .get("/getTeacherCourseFinished?teacherID=" + this.$store.state.teacherID)
         .then(res => {
           if (res.data.code == 1) {
             this.courseData_finished = res.data.data;

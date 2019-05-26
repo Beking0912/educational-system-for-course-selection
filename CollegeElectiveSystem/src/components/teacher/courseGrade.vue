@@ -2,8 +2,8 @@
   <div id="courseGrade">
     <h1>
       <router-link style="cursor: pointer" tag="span" to="/teacher/manageGrade">课程信息</router-link>
-      > {{courseInfo.name}}
-      <span class="tag department">{{courseInfo.department.toString() | department}}</span>
+      > {{courseInfo.courseName}}
+      <span class="tag departmentName">{{courseInfo.departmentName.toString() | departmentName}}</span>
       <span class="tag status">{{courseInfo.status.toString() | status}}</span>
     </h1>
     <div id="main">
@@ -17,7 +17,7 @@
           <el-col class="student_card" :md="12" :xl="8" v-for="item in studentData" :key="item.id">
             <div class="inner">
               <div class="left">
-                <div class="name">{{item.name}}</div>
+                <div class="name">{{item.courseName}}</div>
                 <div class="grade">
                   成绩：{{item.grade}}
                   <span v-if="item.grade == null" style="color: #F56C6C">暂无</span>
@@ -48,9 +48,9 @@ export default {
         departmentID: "专业ID",
         credit: "10",
         semester: "1",
-        department: "1",
+        courseID: "1",
         teacherName: "格格巫",
-        teacherId: "1",
+        teacherID: "1",
         status: "0"
       },
       studentData: [],
@@ -103,7 +103,7 @@ export default {
     },
     getCourseInfo() {
       this.axios
-        .get("/getCourseInfo?id=" + this.$route.params.id)
+        .get("/getCourseInfo?courseID=" + this.$route.params.id)
         .then(res => {
           if (res.data.code == 1) {
             this.courseInfo = res.data.data;
@@ -116,7 +116,7 @@ export default {
     },
     getCourseStudentInfo(callback) {
       this.axios
-        .get("/getCourseStudentInfo?id=" + this.$route.params.id)
+        .get("/getCourseStudentInfo?courseID=" + this.$route.params.id)
         .then(res => {
           if (res.data.code == 1) {
             this.studentData = res.data.data;
@@ -153,7 +153,7 @@ export default {
       )
         .then(() => {
           this.axios
-            .get("/finishedCourse?id=" + this.$route.params.id)
+            .get("/finishedCourse?courseID=" + this.$route.params.id)
             .then(res => {
               if (res.data.code == 1) {
                 this.$router.push("/teacher/manageGrade");
@@ -190,7 +190,7 @@ h1 {
     position: relative;
     top: -2px;
   }
-  .department {
+  .departmentName {
     background-color: #409eff;
     margin-right: 10px;
   }

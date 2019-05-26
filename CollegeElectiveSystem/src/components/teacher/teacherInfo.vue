@@ -5,7 +5,7 @@
       <span>教师</span>
     </div>
     <div class="account">教师编号：{{$store.state.teacherID}}</div>
-    <div class="account">院系：{{$store.state.department}}</div>
+    <div class="account">院系：{{$store.state.departmentName}}</div>
   </div>
 </template>
 

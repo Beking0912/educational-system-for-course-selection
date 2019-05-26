@@ -5,16 +5,16 @@
       <div class="left">
         <div class="card student" v-for="(item,index) in studentData" :key="item.id">
           <div class="info">
-            <div class="name">系别：{{item.department}}</div>
-            <div class="account">学号：{{item.account}}</div>
+            <div class="name">系别：{{item.departmentName}}</div>
+            <div class="account">学号：{{item.studentID}}</div>
             <el-button
               type="danger"
               size="small"
               style="background: #7266ba; border-color: #7266ba"
-              @click="deleteUser(item.id,index)"
+              @click="deleteUser(item.studentID,index)"
             >删除</el-button>
           </div>
-          <div class="avant">{{item.name}}</div>
+          <div class="avant">{{item.studentName}}</div>
         </div>
         <el-button
           type="primary"
@@ -77,7 +77,7 @@ export default {
       })
         .then(() => {
           this.axios
-            .get("/deleteUser?id=" + id)
+            .get("/deleteUser?studentID=" + id)
             .then(res => {
               if (res.data.code == 1) {
                 this.total--;

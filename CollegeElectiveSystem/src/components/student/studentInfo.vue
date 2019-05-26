@@ -5,7 +5,7 @@
       <span>学生</span>
     </div>
     <div class="account">学号：{{$store.state.studentID}}</div>
-    <div class="account">院系：{{$store.state.department}}</div>
+    <div class="account">院系：{{$store.state.departmentName}}</div>
     <div class="account">学期：{{$store.state.semester}}</div>
   </div>
 </template>

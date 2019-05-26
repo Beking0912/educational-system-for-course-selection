@@ -11,10 +11,6 @@
         <el-form-item label="课程简介" prop="courseDes">
           <el-input v-model="form.courseDes" placeholder="请填写该课程的简介"></el-input>
         </el-form-item>
-
-        <!--<el-form-item label="学分" prop="credit">-->
-          <!--<el-input v-model="form.credit" placeholder="请填写选择该课程所能获得的学分"></el-input>-->
-        <!--</el-form-item>-->
         <el-col :span="8"></el-col><el-form-item label="学分" prop="credit">
           <el-input-number v-model="form.credit" @change="handleChange" :step="0.5" :min="1" :max="5.5"></el-input-number>
         </el-form-item>
@@ -37,7 +33,7 @@
             <el-form-item label="课程院系" prop="departmentID">
               <el-select v-model="form.departmentID" placeholder="请选择">
                 <el-option
-                  v-for="item in department"
+                  v-for="item in departmentName"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
@@ -47,8 +43,8 @@
           </el-col>
 
           <el-col :span="8">
-            <!--<el-form-item label="类型" prop="department">-->
-              <!--<el-select v-model="form.department" placeholder="请选择">-->
+            <!--<el-form-item label="类型" prop="departmentName">-->
+              <!--<el-select v-model="form.departmentName" placeholder="请选择">-->
                 <!--<el-option label="必修" value="1"></el-option>-->
                 <!--<el-option label="选修" value="0"></el-option>-->
               <!--</el-select>-->
@@ -81,7 +77,7 @@ export default {
         credit: "",
         semester: "",
         departmentID: "",
-        teacherId: this.$store.state.uid,
+        teacherID: this.$store.state.uid,
         capacity: ""
       },
       semester: [
@@ -118,7 +114,7 @@ export default {
           label: "大四下学期"
         }
       ],
-      department: [
+      departmentName: [
         {
           id: 1,
           name: "计算机与计算机科学"
@@ -206,7 +202,7 @@ export default {
         .get("/getFaculty")
         .then(res => {
           if (res.data.code == 1) {
-            this.department = res.data.data;
+            this.departmentName = res.data.data;
           }
         })
         .catch(err => {

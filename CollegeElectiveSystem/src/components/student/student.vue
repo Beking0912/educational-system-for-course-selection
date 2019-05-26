@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import studentInfo from "/Users/subiqing/Downloads/CollegeElective-System-master/src/components/student/studentInfo.vue";
+import studentInfo from "/Users/subiqing/WebstormProjects/ElectiveCourseSystem/CollegeElectiveSystem/src/components/student/studentInfo.vue";
 export default {
   data() {
     return {};
@@ -57,9 +57,7 @@ export default {
     }
   },
   mounted(){
-    // if(this.$store.state.identity != 'student'){
-    //   this.$router.push('/')
-    // }
+
   }
 };
 </script>

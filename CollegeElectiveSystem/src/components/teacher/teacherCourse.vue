@@ -77,7 +77,7 @@ export default {
     getTeacherClass() {
       // TODO: 获取教师要上的课节
       this.axios
-        .get("/getTeacherClass?id=" + this.$store.state.uid)
+        .get("/getTeacherClass?teacherID=" + this.$store.state.teacherID)
         .then(res => {
           if (res.data.code == 1) {
             this.data = this.parseData(res.data.data);

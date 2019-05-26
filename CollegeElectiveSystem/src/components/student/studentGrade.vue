@@ -31,7 +31,7 @@ export default {
       for (let i = 1; i <= Number(this.semester); i++) {
         // TODO: 获取学生成绩
         this.axios
-          .get(`/getStudentGrade?id=${this.$store.state.uid}&semester=${i}`)
+          .get(`/getStudentGrade?studentID=${this.$store.state.studentID}&semester=${i}`)
           .then(res => {
             if (res.data.code == 1) {
               this.$set(this.data, i - 1, res.data.data);

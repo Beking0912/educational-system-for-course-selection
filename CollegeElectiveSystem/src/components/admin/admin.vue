@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import adminInfo from "/Users/subiqing/Downloads/CollegeElective-System-master/src/components/admin/adminInfo.vue";
+import adminInfo from "/Users/subiqing/WebstormProjects/ElectiveCourseSystem/CollegeElectiveSystem/src/components/admin/adminInfo.vue";
 export default {
   data() {
     return {};

@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import teacherInfo from "/Users/subiqing/Downloads/CollegeElective-System-master/src/components/teacher/teacherInfo.vue";
+import teacherInfo from "/Users/subiqing/WebstormProjects/ElectiveCourseSystem/CollegeElectiveSystem/src/components/teacher/teacherInfo.vue";
 export default {
   data() {
     return {};
@@ -61,9 +61,7 @@ export default {
     }
   },
   mounted(){
-    // if(this.$store.state.identity != 'teacher'){
-    //   this.$router.push('/')
-    // }
+
   }
 };
 </script>

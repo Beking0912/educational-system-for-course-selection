@@ -8,7 +8,7 @@ export default new Vuex.Store({
     uid: '',
     studentName: '王小明',
     teacherName:'翁文勇',
-    department: '计算机与计算机科学',
+    departmentName: '计算机与计算机科学',
     semester: '大三下学期',
     studentID: '31601102',
     teacherID: '21301',

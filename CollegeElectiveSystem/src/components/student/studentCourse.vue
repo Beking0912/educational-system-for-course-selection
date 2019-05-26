@@ -25,7 +25,7 @@
         </div>
         <div class="table_content">
           <div class="class" v-for="(item,index) in data" :key="index">
-            <div class="class_inner" v-if="item.id!=''">
+            <div class="class_inner" v-if="item.timeID!=''">
               <div class="course">{{item.courseName}}</div>
               <div class="class_info">
                 <div class="student">
@@ -38,7 +38,7 @@
                 </div>
               </div>
             </div>
-            <div class="no_class" v-if="item.id == ''">无课</div>
+            <div class="no_class" v-if="item.timeID == ''">无课</div>
           </div>
         </div>
       </div>
@@ -58,7 +58,7 @@ export default {
       let finalData = [];
       for (let i = 0; i < 20; i++) {
         finalData[i] = {
-          id: "",
+          timeID: "",
           courseID: "",
           day: "",
           time: "",
@@ -75,7 +75,7 @@ export default {
     },
     getStudentClass() {
       this.axios
-        .get("/getStudentClass?id=" + this.$store.state.uid)
+        .get("/getStudentClass?studentID=" + this.$store.state.studentID)
         .then(res => {
           if (res.data.code == 1) {
             this.data = this.parseData(res.data.data);
@@ -92,7 +92,7 @@ export default {
     notify() {
       this.$notify.info({
         title: "提示",
-        message: "添加课程并设置上课时间后即可显示教师课表内容",
+        message: "notify",
         customClass: "notifys",
         offset: 100
       });

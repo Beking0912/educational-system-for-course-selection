@@ -5,11 +5,11 @@
       <div class="left">
         <div class="card student" v-for="(item,index) in teacherData" :key="item.id">
           <div class="info">
-            <div class="name">UID：{{item.id}}</div>
-            <div class="account">教师编号：{{item.account}}</div>
-            <el-button type="danger" size="small" @click="deleteUser(item.id,index)">删除</el-button>
+            <div class="name">教师姓名：{{item.teacherName}}</div>
+            <div class="account">教师编号：{{item.teacherID}}</div>
+            <el-button type="danger" size="small" @click="deleteUser(item.teacherID,index)">删除</el-button>
           </div>
-          <div class="avant">{{item.name}}</div>
+          <div class="avant">{{item.teacherName}}</div>
         </div>
         <el-button
           type="primary"
@@ -24,19 +24,19 @@
           <div class="title">添加教师</div>
           <el-form :model="form" :rules="rules" ref="form" label-width="80px" label-position="left">
             <el-form-item label="教师姓名" prop="name">
-              <el-input v-model="form.name"></el-input>
+              <el-input v-model="form.teacherName"></el-input>
             </el-form-item>
 
             <el-form-item label="教师编号" prop="account">
-              <el-input v-model="form.account"></el-input>
+              <el-input v-model="form.teacherID"></el-input>
             </el-form-item>
 
             <el-form-item label="密码" prop="password">
-              <el-input type="password" v-model="form.password"></el-input>
+              <el-input type="password" v-model="form.teacherPwd"></el-input>
             </el-form-item>
 
-            <el-form-item label="教师系别" prop="department">
-              <el-select v-model="form.department" placeholder="请选择" style="width:100%">
+            <el-form-item label="教师系别" prop="departmentName">
+              <el-select v-model="form.departmentName" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="item in options"
                   :key="item.id"
@@ -69,22 +69,22 @@ export default {
       total: 0,
       page: 1,
       form: {
-        account: "",
-        name: "",
-        password: "",
-        department: ""
+        teacherID: "",
+        teacherName: "",
+        teacherPwd: "",
+        departmentName: ""
       },
       rules: {
-        account: [
+        teacherID: [
           { required: true, message: "请填写信息", trigger: ["change", "blur"] }
         ],
-        name: [
+        teacherName: [
           { required: true, message: "请填写信息", trigger: ["change", "blur"] }
         ],
-        password: [
+        teacherPwd: [
           { required: true, message: "请填写信息", trigger: ["change", "blur"] }
         ],
-        department: [{ required: true, message: "请填写信息", trigger: "change" }]
+        departmentName: [{ required: true, message: "请填写信息", trigger: "change" }]
       },
       options: [],
       value: ""
@@ -124,7 +124,7 @@ export default {
       })
         .then(() => {
           this.axios
-            .get("/deleteUser?id=" + id)
+            .get("/deleteUser?teacherID=" + id)
             .then(res => {
               if (res.data.code == 1) {
                 this.total--;
@@ -144,9 +144,9 @@ export default {
           });
         });
     },
-    getfaculity() {
+    getDepartment() {
       this.axios
-        .get("/getFaculty")
+        .get("/getDepartment")
         .then(res => {
           if (res.data.code == 1) {
             this.options = res.data.data;
@@ -165,7 +165,7 @@ export default {
       })
         .then(() => {
           let obj = this.form;
-          obj.faculty = this.form.department;
+          obj.faculty = this.form.departmentName;
           this.axios
             .post("/addTeacher", obj)
             .then(res => {
@@ -216,7 +216,7 @@ export default {
       this.chartData.rows[0].数量 = this.teacherData.length;
       this.chartData.rows[1].数量 = this.total - this.teacherData.length;
     });
-    this.getfaculity();
+    this.getDepartment();
   }
 };
 </script>

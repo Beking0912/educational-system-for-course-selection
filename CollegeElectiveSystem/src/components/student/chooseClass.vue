@@ -5,18 +5,18 @@
       <el-row class="course_box card" :gutter="20">
         <div
           class="title"
-        >当前可选课程范围：{{$store.state.department}} | {{$store.state.semester}}课程</div>
-        <el-col :md="12" :lg="8" :xl="6" v-for="item in courseData" :key="item.id">
-          <div class="course" @click="choose(item.id)" :class="{choose:(item.id == chooseCourse)}">
+        >当前可选课程范围：{{$store.state.departmentName}} | {{$store.state.semester}}课程</div>
+        <el-col :md="12" :lg="8" :xl="6" v-for="item in courseData" :key="item.timeID">
+          <div class="course" @click="choose(item.timeID)" :class="{choose:(item.timeID == chooseCourse)}">
             <div class="group">
-              <div class="name">{{item.name}}</div>
+              <div class="name">{{item.courseName}}</div>
             </div>
             <div class="group">
-              <div class="departmentName">{{item.department}}</div>
+              <div class="departmentName">{{item.departmentName}}</div>
             </div>
             <div class="group">
               <div class="credit">{{item.credit}}学分</div>
-              <div class="department">{{item.department}}</div>
+              <div class="departmentName">{{item.departmentName}}</div>
             </div>
           </div>
         </el-col>
@@ -40,8 +40,8 @@
         </div>
         <div class="choose_card">
           <div class="class" v-for="(item,index) in classTable" :key="index">
-            <div class="class_inner" v-if="item.id == ''"></div>
-            <div class="ban" :class="{choose:item.choose, error:item.error}" v-if="item.id != ''"></div>
+            <div class="class_inner" v-if="item.timeID == ''"></div>
+            <div class="ban" :class="{choose:item.choose, error:item.error}" v-if="item.timeID != ''"></div>
           </div>
         </div>
 
@@ -80,7 +80,7 @@ export default {
   methods: {
     getStudentClass() {
       this.axios
-        .get("/getStudentClass?id=" + this.$store.state.uid)
+        .get("/getStudentClass?studentID=" + this.$store.state.studentID)
         .then(res => {
           if (res.data.code == 1) {
             this.classData = res.data.data;
@@ -95,8 +95,8 @@ export default {
     getCourseData() {
       this.axios
         .get(
-          `/getChooseCourseList?department=${
-            this.$store.state.department
+          `/getChooseCourseList?departmentName=${
+            this.$store.state.departmentName
           }&semester=${this.$store.state.semester}`
         )
         .then(res => {
@@ -115,7 +115,7 @@ export default {
       let finalData = [];
       for (let i = 0; i < 20; i++) {
         finalData[i] = {
-          id: "",
+          timeID: "",
           courseID: "",
           day: "",
           time: "",
@@ -132,10 +132,10 @@ export default {
       this.classTable = finalData;
     },
     // 连带执行chooseClassToClassData
-    choose(id) {
-      this.chooseCourse = id;
+    choose(courseID) {
+      this.chooseCourse = courseID;
       this.axios
-        .get("/getClassByCourse?id=" + id)
+        .get("/getClassByCourse?courseID=" + courseID)
         .then(res => {
           if (res.data.code == 1) {
             this.chooseCourseClassData = res.data.data;
@@ -177,7 +177,7 @@ export default {
     },
     submit() {
       let obj = {
-        uid: this.$store.state.uid.toString(),
+        studentID: this.$store.state.studentID.toString(),
         courseID: this.chooseCourse.toString()
       };
       this.axios

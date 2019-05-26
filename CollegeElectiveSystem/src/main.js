@@ -46,7 +46,7 @@ Vue.filter('toWeek', function (value) {
   }
 })
 
-Vue.filter('department', function (value) {
+Vue.filter('departmentName', function (value) {
   switch (value) {
     case '0':
       return '选修';

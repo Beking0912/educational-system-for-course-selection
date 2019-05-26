@@ -94,7 +94,7 @@ url：/userInfo
         account: "123",
         name: "张三",
         identity: "teacher" // 三种身份'student','teacher','admin'
-        department: '计算机',
+        departmentName: '计算机',
 +       semester: '1' // 学期
     }
 }
@@ -143,7 +143,7 @@ url：/getStudent GET
                 id: "1",
                 account: "123",
                 name: "张三",
-                department: '计算机'
+                departmentName: '计算机'
             }
             ... ... // 返回十条数据
         ]
@@ -194,7 +194,7 @@ url：/addTeacher POST
     account: "",
     name: "",
     password: "",
-    department: ""
+    departmentName: ""
 }
 ```
 
@@ -244,7 +244,7 @@ id: 教师id
             id: '1', // 课节(class)表ID
             courseID: '2',
             classroomID: '2',
-            teacherId: '1',
+            teacherID: '1',
             day: '1',
             time: '2',
             classroom: 'A06-201',
@@ -266,8 +266,8 @@ url：/addCourse POST
     departmentID: "1",
     credit: "5",
     semester: "1",
-    department: "1",
-    teacherId: "1"
+    departmentName: "1",
+    teacherID: "1"
 }
 ```
 
@@ -292,7 +292,7 @@ id: 教师id
             credit: "10",
             departmentName: "院系名",
             semester: "1",
-            department: "1"  //选修是0 必修是1
+            departmentName: "1"  //选修是0 必修是1
         }
         ... ...
     ]
@@ -332,7 +332,7 @@ id: 教师id
             credit: "10",
             departmentName: "院系名",
             semester: "1",
-            department: "1"  //选修是0 必修是1
+            departmentName: "1"  //选修是0 必修是1
         }
         ... ...
     ]
@@ -360,9 +360,9 @@ id:课程id
         departmentID: "专业ID",
         credit: "10",
         semester: "1",
-        department: "1",
+        departmentName: "1",
         teacherName: "格格巫",
-        teacherId: "1",
+        teacherID: "1",
         status: "0"
     }
 }
@@ -451,7 +451,7 @@ id: 学生id
             id: '1', // 课节(class)表ID
             courseID: '2',
             classroomID: '2',
-            teacherId: '1',
+            teacherID: '1',
             day: '1',
             time: '2',
             classroom: 'A06-201',
@@ -471,9 +471,9 @@ url: /getChooseCourseList GET
 
 发送：
 ```
-/getChooseCourseList?department=计算机&semester=2
+/getChooseCourseList?departmentName=计算机&semester=2
 
-department:系别
+departmentName:系别
 semester:学期
 ```
 
@@ -488,7 +488,7 @@ semester:学期
             credit: "10",
             departmentName: "院系名",
             semester: "1",
-            department: "1",  //选修是0 必修是1
+            departmentName: "1",  //选修是0 必修是1
             teacher: "授课教师"
         },
         ... ...
@@ -515,7 +515,7 @@ id:课程id
             id: '1', // 课节(class)表ID
             courseID: '2',
             classroomID: '2',
-            teacherId: '1',
+            teacherID: '1',
             day: '1',
             time: '2',
             classroom: 'A06-201',

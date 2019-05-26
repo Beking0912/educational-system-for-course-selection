@@ -9,21 +9,21 @@
           </div>
           <div class="left_inner">
             <div v-if="courseData.length == 0" style="padding-left: 10px;">请添加课程</div>
-            <div class="inner" v-for="item in courseData" :key="item.id">
+            <div class="inner" v-for="item in courseData" :key="item.timeID">
               <div
                 class="course"
-                @click="chooseCourse = item.id"
-                :class="{choose:(item.id == chooseCourse)}"
+                @click="chooseCourse = item.timeID"
+                :class="{choose:(item.timeID == chooseCourse)}"
               >
                 <div class="group">
-                  <div class="name">{{item.name}}</div>
+                  <div class="name">{{item.courseName}}</div>
                 </div>
                 <div class="group">
                   <div class="departmentName">{{item.departmentName}}</div>
                 </div>
                 <div class="group">
                   <div class="credit">{{item.credit}}学分</div>
-                  <div class="department">{{item.department | department}}</div>
+                  <div class="departmentName">{{item.departmentName | departmentName}}</div>
                 </div>
               </div>
             </div>
@@ -54,10 +54,10 @@
               <div
                 :class="{choose:item.choose}"
                 class="class_inner"
-                v-if="item.id == ''"
+                v-if="item.timeID == ''"
                 @click="choose(item,index);"
               ></div>
-              <div class="ban" v-if="item.id != ''"></div>
+              <div class="ban" v-if="item.timeID != ''"></div>
             </div>
           </div>
           <div class="tag">
@@ -95,7 +95,7 @@ export default {
       let finalData = [];
       for (let i = 0; i < 20; i++) {
         finalData[i] = {
-          id: "",
+          timeID: "",
           courseID: "",
           classroomID: "",
           day: (i + 1) % 4 == 0 ? (i + 1) / 4 : parseInt((i + 1) / 4 + 1),
@@ -177,7 +177,7 @@ export default {
     },
     getTeacherClass() {
       this.axios
-        .get("/getTeacherClass?id=" + this.$store.state.uid)
+        .get("/getTeacherClass?teacherID=" + this.$store.state.teacherID)
         .then(res => {
           if (res.data.code == 1) {
             this.data = this.parseData(res.data.data);
@@ -190,7 +190,7 @@ export default {
     },
     getTeacherCourse() {
       this.axios
-        .get("/getTeacherCourse?id=" + this.$store.state.uid)
+        .get("/getTeacherCourse?teacherID=" + this.$store.state.teacherID)
         .then(res => {
           if (res.data.code == 1) {
             this.courseData = res.data.data;
