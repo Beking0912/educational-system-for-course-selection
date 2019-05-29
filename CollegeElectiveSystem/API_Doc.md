@@ -1,7 +1,7 @@
 ## 1. 基本
 
 ### 1.0 获取系别
-url：/getfaculty GET
+url：/getDepartment GET
 
 返回：
 ```js
@@ -9,8 +9,8 @@ url：/getfaculty GET
     code: 1,
     data: [
         {
-            id: '111',
-            name: '系别名'
+            departmentID: '1',
+            departmentName: '系别名'
         },
         ... ...
     ]
@@ -24,10 +24,20 @@ url: /login
 
 发送：
 ```js
-// 普通用户登录
+// 学生用户登录
 {
-    account: "111",
-    password: "123",
+    studentID: "111",
+    studentPwd: "123",
+}
+// 教师用户登录
+{
+    teacherID: "111",
+    teacherPwd: "123",
+}
+// 管理员用户登录
+{
+    adminID: "111",
+    adminPwd: "123",
 }
 ```
 
@@ -57,11 +67,11 @@ url: /register
 发送：
 ```js
 {
-    account: "123",
-    password: "123",
+    studentID: "123",
+    studentPwd: "123",
     name: "张三",
-    faculty: '计算机' // 系别
-    enterTime: '1111111111111'
+    departmentName: '计算机' 
+    studentSemester: '大三下学期'
 }
 ```
 
@@ -79,8 +89,8 @@ url: /register
 }
 ```
 
-### 1.3 获取用户信息
-url：/userInfo 
+### 1.3 获取学生信息
+url：/studentInfo 
 
 类型：get
 
@@ -90,12 +100,10 @@ url：/userInfo
 {
     code: 1,
     data:{
-        uid: "1",
-        account: "123",
+        studentID: "1",
         name: "张三",
-        identity: "teacher" // 三种身份'student','teacher','admin'
         departmentName: '计算机',
-+       semester: '1' // 学期
++       studentSemester: '大三下学期'
     }
 }
 
@@ -105,23 +113,31 @@ url：/userInfo
 }
 ```
 
+### 1.4 获取教师信息
+url：/teacherInfo 
 
-## 2. 管理员界面相关
-
-### 2.1 获取学校基本信息
-url：/getSchoolInfo GET
+类型：get
 
 返回：
-```
+```js
+// 如果有token，则返回
 {
     code: 1,
-    data: {
-        studentNum: 999,
-        teacherNum: 999,
-        classroomNum: 999
+    data:{
+        teacherID: "1",
+        teacherName: "张三",
+        departmentName: '计算机',
++       teacherAge: '40' ,
+        teacherDes: ' '
     }
 }
+
+// 如果没有token，则返回
+{
+    coed: 2
+}
 ```
+## 2. 管理员界面相关
 
 ### 2.2 获取学生信息
 url：/getStudent GET
@@ -140,10 +156,10 @@ url：/getStudent GET
         total: 1000,
         studentData: [
             {
-                id: "1",
-                account: "123",
+                studentID: "1",
                 name: "张三",
-                departmentName: '计算机'
+                departmentName: '计算机',
+        +       studentSemester: '大三下学期'
             }
             ... ... // 返回十条数据
         ]
@@ -167,9 +183,11 @@ url：/getTeacherData GET
         total: 1000,
         teacherData: [
             {
-                id: "1",
-                account: "123",
-                name: "张三"
+                teacherID: "1",
+                teacherName: "张三",
+                departmentName: '计算机',
+        +       teacherAge: '40' ,
+                teacherDes: ' '
             }
             ... ... // 返回十条数据
         ]
@@ -178,11 +196,17 @@ url：/getTeacherData GET
 ```
 
 ### 2.3 删除用户
-url：/deleteUser GET
+url：/deleteStudent GET
 
 发送：
 ```
-/deleteUser?id=1
+/deleteStudent?teacherID=1
+```
+url：/deleteTeacher GET
+
+发送：
+```
+/deleteTeacher?teacherID=1
 ```
 
 ### 2.4 添加教师
@@ -191,36 +215,25 @@ url：/addTeacher POST
 发送：
 ```js
 {
-    account: "",
-    name: "",
-    password: "",
-    departmentName: ""
+    teacherID: "",
+    teacherName: "",
+    departmentName: '',
+    teacherAge: '' ,
+    teacherDes: '',
+    teacherPwd: ""
 }
 ```
-
-### 2.5 获取教室
-url：/getClassroom GET
-
-返回：
-```js
-{
-    code: 1,
-    data: [
-        {
-            id: 1, //教室id
-            location: "A06-403" // 存为字符串类型
-        }
-    ]
-}
-```
-
-### 2.6 添加教室 
-url：/addClassroom POST
+### 2.5 添加学生
+url：/addStudent POST
 
 发送：
 ```js
 {
-    location: "A06-403"
+    studentID: "",
+    name: "",
+    departmentName: '',
+    studentSemester: '',
+    studentPwd: ""
 }
 ```
 
@@ -230,9 +243,7 @@ url：/getTeacherClass
 
 发送：
 ```
-/getTeacherClass?id=1
-
-id: 教师id
+/getTeacherClass?teacherID=1
 ```
 
 返回：
@@ -241,15 +252,13 @@ id: 教师id
     code: 1,
     data: [
         {
-            id: '1', // 课节(class)表ID
             courseID: '2',
-            classroomID: '2',
             teacherID: '1',
             day: '1',
             time: '2',
-            classroom: 'A06-201',
+            classroom: '226',
             courseName: '软件工程',
-            teacherName: '小红红'
+            teacherName: '小'
         }
         ... ...
     ]
@@ -262,12 +271,15 @@ url：/addCourse POST
 发送：
 ```js
 {
-    name: "课程名",
+    courseName: "课程名",
     departmentID: "1",
     credit: "5",
     semester: "1",
     departmentName: "1",
-    teacherID: "1"
+    teacherID: "1",
+    capacity:'',
+    courseDes:'',
+    classroom:''
 }
 ```
 
@@ -276,9 +288,7 @@ url：/getTeacherCourse GET
 
 发送：
 ```
-/getTeacherCourse?id=1
-
-id: 教师id
+/getTeacherCourse?teacherID=1
 ```
 
 返回:
@@ -287,12 +297,11 @@ id: 教师id
     code: 1,
     data: [
         {
-            id: '11',
-            name: "课程名",
-            credit: "10",
-            departmentName: "院系名",
+            teacherID:"",
+            courseName: "课程名",
+            credit: "5",
             semester: "1",
-            departmentName: "1"  //选修是0 必修是1
+            departmentName: "1"
         }
         ... ...
     ]
@@ -316,9 +325,7 @@ url：/getTeacherCourseFinished GET
 
 发送：
 ```
-/getTeacherCourseFinished?id=1
-
-id: 教师id
+/getTeacherCourseFinished?teacherID=1
 ```
 
 返回:
@@ -327,12 +334,11 @@ id: 教师id
     code: 1,
     data: [
         {
-            id: '11',
-            name: "课程名",
-            credit: "10",
-            departmentName: "院系名",
+            teacherID:"",
+            courseName: "课程名",
+            credit: "5",
             semester: "1",
-            departmentName: "1"  //选修是0 必修是1
+            departmentName: "1"
         }
         ... ...
     ]
@@ -345,9 +351,7 @@ url：/getCourseInfo GET
 
 发送：
 ```
-/getCourseInfo?id=1
-
-id:课程id
+/getCourseInfo?courseID=1
 ```
 
 返回：
@@ -355,15 +359,16 @@ id:课程id
 {
     code: 1,
     data: {
-        name: "课程名",
-        departmentName: "专业名",
-        departmentID: "专业ID",
-        credit: "10",
+        courseName: "课程名",
+        departmentID: "1",
+        credit: "5",
         semester: "1",
         departmentName: "1",
-        teacherName: "格格巫",
         teacherID: "1",
-        status: "0"
+        capacity:'',
+        courseDes:'',
+        classroom:'',
+        status:"",
     }
 }
 ```
@@ -373,9 +378,7 @@ url：/getCourseStudentInfo GET
 
 发送：
 ```
-/getCourseStudentInfo?id=1
-
-id: 课程id
+/getCourseStudentInfo?courseID=1
 ```
 
 返回：
@@ -384,8 +387,8 @@ id: 课程id
     code: 1,
     data: [
         {
-            id: "1", // 学生id
-            name: "李帅帅",
+            studentID: "1", // 学生id
+            studentName: "李pc",
             grade: "98"
         },
         ... ...
@@ -399,9 +402,9 @@ url：/setGrade POST
 发送：
 ```js
 {
-    courseID: "1", // 课程id
-    studentId: "2", // 学生id
-    grade: "99" // 成绩
+    courseID: "1", 
+    studentID: "2", 
+    grade: "99" 
 }
 ```
 
@@ -410,26 +413,8 @@ url：/finishedCourse GET
 
 发送：
 ```
-/finishedCourse?id=1
-
-id: 课程id
+/finishedCourse?courseID=1
 ```
-
-### 3.10 添加院系
-url: /addfaculty POST
-
-发送：
-```
-{
-    departmentName: '院系名'
-}
-```
-
-
-
-
-
-
 ## 4. 学生系统
 
 ### 4.1 获取某个学生的课节（这些课对应的课程状态为未结课）
@@ -437,9 +422,7 @@ url：/getStudentClass GET
 
 发送：
 ```
-/getStudentClass?id=1
-
-id: 学生id
+/getStudentClass?studentID=1
 ```
 
 返回:
@@ -448,13 +431,12 @@ id: 学生id
     code: 1,
     data: [
         {
-            id: '1', // 课节(class)表ID
+            timeID: '1', // 课节(class)表ID
             courseID: '2',
-            classroomID: '2',
+            classroom: '2',
             teacherID: '1',
             day: '1',
             time: '2',
-            classroom: 'A06-201',
             courseName: '软件工程',
             teacherName: '小红红'
         }
@@ -472,9 +454,6 @@ url: /getChooseCourseList GET
 发送：
 ```
 /getChooseCourseList?departmentName=计算机&semester=2
-
-departmentName:系别
-semester:学期
 ```
 
 返回:
@@ -483,13 +462,16 @@ semester:学期
     code: 1,
     data: [
         {
-            id: '11',
-            name: "课程名",
-            credit: "10",
+            courseID: '11',
+            courseName: "课程名",
+            credit: "2",
             departmentName: "院系名",
             semester: "1",
-            departmentName: "1",  //选修是0 必修是1
-            teacher: "授课教师"
+            teacherName: "授课教师",
+            capacity:'',
+            margin:'',
+            courseDes:'',
+            classroom:''
         },
         ... ...
     ]
@@ -501,9 +483,7 @@ url：/getClassByCourse GET
 
 发送：
 ```
-/getClassByCourse?id=1
-
-id:课程id
+/getClassByCourse?courseID=1
 ```
 
 返回：
@@ -512,15 +492,14 @@ id:课程id
     code: 1,
     data: [
         {
-            id: '1', // 课节(class)表ID
+            timeID: '1', // 课节(class)表ID
             courseID: '2',
-            classroomID: '2',
-            teacherID: '1',
+            teacherId: '1',
             day: '1',
             time: '2',
-            classroom: 'A06-201',
+            classroom: '226',
             courseName: '软件工程',
-            teacherName: '小红红'
+            teacherName: '小'
         }
         ... ...
     ]
@@ -533,7 +512,7 @@ url: /chooseCourse POST
 发送：
 ```js
 {
-    uid: "1", //学生id
+    studentID: "1", //学生id
     courseID: "2" //课程id
 }
 ```
@@ -544,10 +523,7 @@ url：/getStudentGrade GET
 
 发送：
 ```
-/getStudentGrade?id=1&semester=1
-
-id: 学生id
-semester: 学期编号
+/getStudentGrade?studentID=1&semester=1
 ```
 
 返回：
@@ -556,11 +532,10 @@ semester: 学期编号
     code: 1,
     data: [
         {
-            id: '1', // 选课记录id
-            courseID: '2', // 课程id,
+            courseID: '2', 
             courseName: '课程名',
             grade: '100',
-            credit: '10'
+            credit: '2'
         }
         ... ...
     ]

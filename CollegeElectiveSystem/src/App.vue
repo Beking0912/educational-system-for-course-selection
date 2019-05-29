@@ -41,7 +41,7 @@ export default {
     //       this.$router.push("/teacher");
     //       break;
     //     case "admin":
-          this.$router.push("/admin");
+          this.$router.push("/teacher");
     //       break;
     //   }
     // });
