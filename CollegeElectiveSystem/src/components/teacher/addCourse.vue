@@ -12,7 +12,7 @@
           <el-input v-model="form.courseDes" placeholder="请填写该课程的简介"></el-input>
         </el-form-item>
         <el-col :span="8"></el-col><el-form-item label="学分" prop="credit">
-          <el-input-number v-model="form.credit" @change="handleChange" :step="0.5" :min="1" :max="5.5"></el-input-number>
+          <el-input-number v-model="form.credit" @change="handleChange" :step="1" :min="1" :max="5"></el-input-number>
         </el-form-item>
 
         <el-row>
@@ -30,10 +30,10 @@
           </el-col>
 
           <el-col :span="8">
-            <el-form-item label="课程院系" prop="departmentID">
-              <el-select v-model="form.departmentID" placeholder="请选择">
+            <el-form-item label="课程院系" prop="department">
+              <el-select v-model="form.departmentName" placeholder="请选择">
                 <el-option
-                  v-for="item in departmentName"
+                  v-for="item in department"
                   :key="item.id"
                   :label="item.name"
                   :value="item.id"
@@ -73,11 +73,12 @@ export default {
     return {
       form: {
         courseName: "",
+        departmentName:"",
         courseDes: "",
         credit: "",
         semester: "",
         departmentID: "",
-        teacherID: this.$store.state.uid,
+        teacherID: this.$store.state.teacherID,
         capacity: ""
       },
       semester: [
@@ -114,7 +115,7 @@ export default {
           label: "大四下学期"
         }
       ],
-      departmentName: [
+      department: [
         {
           id: 1,
           name: "计算机与计算机科学"
@@ -155,6 +156,9 @@ export default {
     };
   },
   methods: {
+    handleChange(value) {
+      console.log(value);
+    },
     submit() {
       this.$refs.form.validate(valid => {
         if (valid) {
@@ -197,12 +201,12 @@ export default {
           this.$message("服务器无法连接，添加课程失败");
         });
     },
-    getfaculity() {
+    getDepartment() {
       this.axios
-        .get("/getFaculty")
+        .get("/getDepartment")
         .then(res => {
           if (res.data.code == 1) {
-            this.departmentName = res.data.data;
+            this.department = res.data.data;
           }
         })
         .catch(err => {
@@ -212,7 +216,7 @@ export default {
     }
   },
   mounted() {
-    this.getfaculity();
+    this.getDepartment();
   }
 };
 </script>

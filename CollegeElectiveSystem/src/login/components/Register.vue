@@ -34,17 +34,6 @@
           </el-form-item>
         </el-col>
 
-        <el-col :span="12">
-          <el-form-item label="入学时间" prop="enter_time">
-            <el-date-picker
-              style="width: 100%;"
-              v-model="registerForm.enter_time"
-              type="year"
-              placeholder="选择年"
-              value-format="yyyy"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
       </el-row>
 
       <el-form-item class="btn_box">
@@ -73,8 +62,7 @@ export default {
         name: "",
         password: "",
         password2: "",
-        departmentName: "",
-        enter_time: ""
+        departmentName: ""
       },
       rules: {
         account: [{ required: true, message: "请输入账号", trigger: "blur" }],
@@ -85,13 +73,6 @@ export default {
         ],
         departmentName: [
           { required: true, message: "请选择系别", trigger: ["blur", "change"] }
-        ],
-        enter_time: [
-          {
-            required: true,
-            message: "请选择入学时间",
-            trigger: ["blur", "change"]
-          }
         ]
       },
       departmentName: [],
@@ -105,8 +86,7 @@ export default {
             account: this.registerForm.account,
             password: this.registerForm.password,
             name: this.registerForm.name,
-            faculty: this.registerForm.departmentName,
-            enterTime: this.parseTime(this.registerForm.enter_time).toString()
+            departmentName: this.registerForm.departmentName
           };
           console.log(obj);
           this.axios
@@ -127,9 +107,9 @@ export default {
         }
       });
     },
-    getfaculity() {
+    getDepartment() {
       this.axios
-        .get("/getFaculty")
+        .get("/getDepartment")
         .then(res => {
           if (res.data.code == 1) {
             this.departmentName = res.data.data;
@@ -139,14 +119,10 @@ export default {
           console.log(err);
           this.$message("获取系别失败，服务器无法连接");
         });
-    },
-    parseTime(year) {
-      let time_str = `${year}-09-01`;
-      return Date.parse(new Date(time_str));
     }
   },
   mounted() {
-    this.getfaculity();
+    this.getDepartment();
   }
 };
 </script>

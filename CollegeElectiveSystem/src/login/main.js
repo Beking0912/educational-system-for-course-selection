@@ -5,6 +5,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import global from '../common.vue'
 import './plugins/element'
+import store from '../store'
 
 
 // 将引入的全局设置文件绑定到Vue的COMMON属性上
@@ -17,6 +18,7 @@ axios.defaults.baseURL = global.host;
 
 new Vue({
   router,
+  store,
   render: h => h(App)
 }).$mount('#app');
 Vue.config.productionTip = false;

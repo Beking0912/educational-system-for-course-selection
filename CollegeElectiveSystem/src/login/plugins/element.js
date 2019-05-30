@@ -2,7 +2,7 @@ import Vue from 'vue'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import {
-  Button, Input, FormItem, Form, Select, Option, Row, Col, Message, Radio, Checkbox, DatePicker
+  Button, Input, FormItem, Form, Select, Option, Row, Col, Message, Radio, Checkbox, DatePicker,RadioGroup
 } from 'element-ui'
 
 Message.install = function (Vue) {
@@ -22,3 +22,4 @@ Vue.use(Message)
 Vue.use(Radio)
 Vue.use(Checkbox)
 Vue.use(DatePicker)
+Vue.use(RadioGroup)

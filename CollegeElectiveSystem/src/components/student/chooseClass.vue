@@ -5,18 +5,20 @@
       <el-row class="course_box card" :gutter="20">
         <div
           class="title"
-        >当前可选课程范围：{{$store.state.departmentName}} | {{$store.state.semester}}课程</div>
+        >当前可选课程范围：{{$store.state.department}} | {{$store.state.studentSemester}}课程</div>
         <el-col :md="12" :lg="8" :xl="6" v-for="item in courseData" :key="item.timeID">
           <div class="course" @click="choose(item.timeID)" :class="{choose:(item.timeID == chooseCourse)}">
             <div class="group">
               <div class="name">{{item.courseName}}</div>
             </div>
+            <!--<div class="group">-->
+              <!--<div class="departmentName">{{item.department}}</div>-->
+            <!--</div>-->
             <div class="group">
-              <div class="departmentName">{{item.departmentName}}</div>
-            </div>
-            <div class="group">
+              <div class="credit">{{item.teacherName}}</div>
               <div class="credit">{{item.credit}}学分</div>
-              <div class="departmentName">{{item.departmentName}}</div>
+              <div class="departmentName">{{item.department}}</div>
+              <div class="departmentName">{{item.classroom}}</div>
             </div>
           </div>
         </el-col>
@@ -96,8 +98,8 @@ export default {
       this.axios
         .get(
           `/getChooseCourseList?departmentName=${
-            this.$store.state.departmentName
-          }&semester=${this.$store.state.semester}`
+            this.$store.state.department
+          }&semester=${this.$store.state.studentSemester}`
         )
         .then(res => {
           if (res.data.code == 1) {
@@ -113,7 +115,7 @@ export default {
     parseData() {
       let data = this.classData;
       let finalData = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 55; i++) {
         finalData[i] = {
           timeID: "",
           courseID: "",
@@ -134,6 +136,7 @@ export default {
     // 连带执行chooseClassToClassData
     choose(courseID) {
       this.chooseCourse = courseID;
+      console.log(this.courseID);
       this.axios
         .get("/getClassByCourse?courseID=" + courseID)
         .then(res => {
@@ -261,7 +264,7 @@ export default {
   }
   .class_box {
     width: 290px;
-    height: 240px;
+    height: 640px;
     .header {
       display: flex;
       .day {
@@ -274,7 +277,7 @@ export default {
       display: flex;
       flex-direction: column;
       flex-wrap: wrap;
-      height: 220px;
+      height: 640px;
       .class {
         width: 20%;
         height: 55px;

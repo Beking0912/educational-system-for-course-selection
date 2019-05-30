@@ -114,14 +114,14 @@ var router = new Router({
   ]
 })
 
-// router.beforeEach((to, from, next) => {
-//   if (localStorage.getItem('token')) {
-//     next();
-//   } else {
-//     console.log("no token!");
-//     window.location.href = global.login_location
-//     next();
-//   }
-// })
+router.beforeEach((to, from, next) => {
+  if (localStorage.getItem('token')) {
+    next();
+  } else {
+    console.log("no token!");
+    window.location.href = global.login_location
+    next();
+  }
+})
 
 export default router

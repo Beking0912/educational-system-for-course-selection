@@ -48,10 +48,10 @@ Vue.filter('toWeek', function (value) {
 
 Vue.filter('departmentName', function (value) {
   switch (value) {
-    case '0':
-      return '选修';
     case '1':
-      return '必修';
+      return '计算机与计算机科学';
+    case '2':
+      return '软件工程';
   }
 })
 

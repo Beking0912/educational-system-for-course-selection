@@ -22,7 +22,7 @@
 export default {
   data() {
     return {
-      semester: this.$store.state.semester,
+      semester: this.$store.state.studentSemester,
       data: []
     };
   },

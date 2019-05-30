@@ -5,7 +5,12 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+
+    };
+  },
+  mounted() {
+    console.log(this.$store.state.role)
   }
 };
 </script>

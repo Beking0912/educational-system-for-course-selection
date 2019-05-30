@@ -11,14 +11,13 @@
                 <div class="name">{{item.teacherName}}</div>
               </div>
               <div class="group">
-                <div class="semester">{{item.semester | semester}}</div>
+                <div class="semester">{{item.courseName }}</div>
               </div>
               <div class="group">
-                <div class="departmentName">{{item.departmentName}}</div>
+                <div class="name">{{item.teacherName}}</div>
               </div>
               <div class="group">
-                <div class="credit">{{item.credit}}学分</div>
-                <div class="departmentName">{{item.departmentName | departmentName}}</div>
+                <div class="departmentName">{{item.credit }}学分</div>
               </div>
             </div>
           </div>
@@ -30,17 +29,16 @@
           <div class="col" v-for="item in courseData_finished" :key="item.id">
             <div class="course" @click="gotoCourseGrade(item.id)">
               <div class="group">
-                <div class="name">{{item.name}}</div>
+                <div class="name">{{item.teacherName}}</div>
               </div>
               <div class="group">
-                <div class="semester">{{item.semester | semester}}</div>
+                <div class="semester">{{item.courseName }}</div>
               </div>
               <div class="group">
-                <div class="departmentName">{{item.departmentName}}</div>
+                <div class="name">{{item.teacherName}}</div>
               </div>
               <div class="group">
-                <div class="credit">{{item.credit}}学分</div>
-                <div class="departmentName">{{item.departmentName | departmentName}}</div>
+                <div class="departmentName">{{item.credit }}学分</div>
               </div>
             </div>
           </div>

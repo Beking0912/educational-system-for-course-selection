@@ -56,7 +56,7 @@ export default {
   methods: {
     parseData(data) {
       let finalData = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 55; i++) {
         finalData[i] = {
           id: "",
           courseID: "",
@@ -146,7 +146,7 @@ export default {
     flex-wrap: wrap;
     width: 100%;
     .class {
-      height: 150px;
+      height: 90px;
       width: 20%;
       padding: 10px;
       box-sizing: border-box;
@@ -189,7 +189,6 @@ export default {
         border-radius: 10px;
         padding: 20px;
         box-sizing: border-box;
-        line-height: 90px;
         text-align: center;
         font-size: 1.2rem;
         font-weight: lighter;

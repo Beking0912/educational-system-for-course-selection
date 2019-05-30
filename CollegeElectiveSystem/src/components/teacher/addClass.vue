@@ -93,13 +93,13 @@ export default {
   methods: {
     parseData(data) {
       let finalData = [];
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < 55; i++) {
         finalData[i] = {
           timeID: "",
           courseID: "",
           classroomID: "",
-          day: (i + 1) % 4 == 0 ? (i + 1) / 4 : parseInt((i + 1) / 4 + 1),
-          time: (i + 1) % 4 == 0 ? 4 : (i + 1) % 4,
+          day: (i + 1) % 11 == 0 ? (i + 1) / 11 : parseInt((i + 1) / 11 + 1),
+          time: (i + 1) % 11 == 0 ? 11 : (i + 1) % 11,
           classroom: "",
           courseName: "",
           choose: false
@@ -299,7 +299,7 @@ export default {
       display: flex;
       flex-direction: column;
       flex-wrap: wrap;
-      height: 220px;
+      height: 640px;
       .class {
         width: 20%;
         height: 55px;
