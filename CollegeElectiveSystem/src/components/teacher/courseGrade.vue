@@ -3,8 +3,8 @@
     <h1>
       <router-link style="cursor: pointer" tag="span" to="/teacher/manageGrade">课程信息</router-link>
       > {{courseInfo.courseName}}
-      <span class="tag departmentName">{{courseInfo.departmentName.toString() | departmentName}}</span>
-      <span class="tag status">{{courseInfo.status.toString() | status}}</span>
+      <span class="tag departmentName">{{courseInfo.departmentName}}</span>
+      <span class="tag status">{{courseInfo.status}}</span>
     </h1>
     <div id="main">
       <div class="left">
@@ -14,17 +14,17 @@
             style="margin-top: 10px; margin-left: 10px;"
             v-if="studentData.length == 0"
           >尚未有学生选该课程</el-col>
-          <el-col class="student_card" :md="12" :xl="8" v-for="item in studentData" :key="item.id">
+          <el-col class="student_card" :md="12" :xl="8" v-for="item in studentData" :key="item.studentID">
             <div class="inner">
               <div class="left">
-                <div class="name">{{item.courseName}}</div>
+                <div class="name">{{item.studentID}}</div>
                 <div class="grade">
                   成绩：{{item.grade}}
                   <span v-if="item.grade == null" style="color: #F56C6C">暂无</span>
                 </div>
               </div>
               <div class="righ">
-                <el-button type="primary" @click="setGrade(item.id)">登录成绩</el-button>
+                <el-button type="primary" @click="setGrade(item.studentID)">登录成绩</el-button>
               </div>
             </div>
           </el-col>
@@ -43,15 +43,15 @@ export default {
   data() {
     return {
       courseInfo: {
-        name: "课程名",
-        departmentName: "专业名",
-        departmentID: "专业ID",
-        credit: "10",
-        semester: "1",
-        courseID: "1",
-        teacherName: "格格巫",
-        teacherID: "1",
-        status: "0"
+        name: "",
+        departmentName: "",
+        departmentID: "",
+        credit: "",
+        semester: "",
+        courseID: "",
+        teacherName: "",
+        teacherID: "",
+        status: ""
       },
       studentData: [],
       chartData: {
@@ -73,9 +73,9 @@ export default {
       })
         .then(({ value }) => {
           let obj = {
-            courseID: this.$route.params.id.toString(),
-            studentID: id.toString(),
-            grade: value.toString()
+            courseID: this.$route.params.courseID,
+            studentID: id,
+            grade: value
           };
           this.axios
             .post("/setGrade", obj)
@@ -103,7 +103,7 @@ export default {
     },
     getCourseInfo() {
       this.axios
-        .get("/getCourseInfo?courseID=" + this.$route.params.id)
+        .get("/getCourseInfo?courseID=" + this.$route.params.courseID)
         .then(res => {
           if (res.data.code == 1) {
             this.courseInfo = res.data.data;
@@ -116,7 +116,7 @@ export default {
     },
     getCourseStudentInfo(callback) {
       this.axios
-        .get("/getCourseStudentInfo?courseID=" + this.$route.params.id)
+        .get("/getCourseStudentInfo?courseID=" + this.$route.params.courseID)
         .then(res => {
           if (res.data.code == 1) {
             this.studentData = res.data.data;
@@ -153,7 +153,7 @@ export default {
       )
         .then(() => {
           this.axios
-            .get("/finishedCourse?courseID=" + this.$route.params.id)
+            .get("/finishedCourse?courseID=" + this.$route.params.courseID)
             .then(res => {
               if (res.data.code == 1) {
                 this.$router.push("/teacher/manageGrade");

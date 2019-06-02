@@ -26,7 +26,7 @@ import admin from './components/admin/admin.vue'
 import schoolInfo from './components/admin/schoolInfo.vue'
 import manageStudent from './components/admin/manageStudent.vue'
 import manageTeacher from './components/admin/manageTeacher.vue'
-
+import addDepartment from './components/admin/addDepartment.vue'
 
 
 
@@ -87,7 +87,7 @@ var router = new Router({
           component: manageGrade
         },
         {
-          path: 'manageGrade/:id',
+          path: 'manageGrade/:courseID',
           component: courseGrade
         }
       ]
@@ -108,6 +108,10 @@ var router = new Router({
         {
           path: 'manageTeacher',
           component: manageTeacher
+        },
+        {
+          path: 'addDepartment',
+          component: addDepartment
         }
       ]
     }

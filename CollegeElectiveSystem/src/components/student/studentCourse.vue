@@ -25,19 +25,15 @@
         </div>
         <div class="table_content">
           <div class="class" v-for="(item,index) in data" :key="index">
-            <div class="class_inner" v-if="item.timeID!=''">
+            <div class="class_inner" v-if="item.timeID!=''"
+                 @click="quitCourse(item.courseID, index)">
               <div class="course">{{item.courseName}}</div>
               <div class="class_info">
-                <div class="student">
-                  <i class="el-icon-info"></i>
-                  {{item.teacherName}}
-                </div>
-                <div class="classroom">
-                  <i class="el-icon-location"></i>
-                  {{item.classroom}}
-                </div>
+                <div class="student"><i class="el-icon-info"></i>{{item.teacherName}}</div>
+                <div class="classroom"><i class="el-icon-location"></i>{{item.classroom}}</div>
               </div>
             </div>
+
             <div class="no_class" v-if="item.timeID == ''">无课</div>
           </div>
         </div>
@@ -50,7 +46,8 @@
 export default {
   data() {
     return {
-      data: []
+      data: [],
+      dialogVisible: false
     };
   },
   methods: {
@@ -96,7 +93,36 @@ export default {
         customClass: "notifys",
         offset: 100
       });
-    }
+    },
+    quitCourse(courseID, index) {
+      this.$confirm("您确定要退选该课程吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+              .then(() => {
+                this.axios
+                        .get("/quitCourse?studentID=" + this.$store.state.studentID+"&courseID=" + courseID)
+                        .then(res => {
+                          if (res.data.code == 1) {
+                            this.total--;
+                            this.data.splice(index, 1);
+                            this.$message("退课成功！");
+                          }
+                          else this.$message("抱歉，该课程当前已无法退课！");
+                        })
+                        .catch(err => {
+                          console.log(err);
+                          this.$message("服务器无法连接");
+                        });
+              })
+              .catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "操作已取消"
+                });
+              });
+    },
   },
   mounted() {
     this.getStudentClass();
@@ -108,7 +134,6 @@ export default {
 .table_head {
   padding: 20px;
   background-color: #fff;
-  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   margin-bottom: 20px;
@@ -154,30 +179,31 @@ export default {
       @media screen and (max-width: 1540px) {
         font-size: 14px;
         .course {
-          min-height: 50px !important;
+          /*min-height: 50px !important;*/
           font-size: 1rem !important;
         }
         .class_info {
           display: block !important;
-          line-height: 20px !important;
+          /*line-height: 20px !important;*/
         }
       }
       .class_inner {
         background-color: #409eff;
         height: 100%;
         border-radius: 10px;
-        padding: 20px;
+        padding-left: 20px;
+        padding-top: 5px;
         box-sizing: border-box;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
         .course {
           color: white;
           font-size: 1.2rem;
           font-weight: bold;
-          min-height: 65px;
+          /*min-height: 65px;*/
         }
         .class_info {
           display: flex;
-          line-height: 30px;
+          /*line-height: 30px;*/
           color: white;
           .student {
             margin-right: 10px;

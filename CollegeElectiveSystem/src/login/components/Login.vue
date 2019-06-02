@@ -99,7 +99,8 @@ export default {
                 this.$message("账号或密码错误");
               }
             })
-            .catch(() => {
+            .catch((err) => {
+              console.log(err)
               this.$message("服务器连接失败");
             });
         } else {

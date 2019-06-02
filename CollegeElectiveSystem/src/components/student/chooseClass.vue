@@ -1,13 +1,28 @@
 <template>
   <div id="chooseClass">
     <h1>学生选课</h1>
+  <div class="search-nox">
+    <el-input v-model="input" class="input-with-select" placeholder="请输入内容">
+      <el-select v-model="select" slot="prepend" class="aa" placeholder="请选择条件">
+        <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+        </el-option>
+      </el-select>
+      <el-button slot="append" icon="el-icon-search" @click="searchCourse(select,input)"></el-button>
+    </el-input>
+  </div>
+
     <div class="main">
       <el-row class="course_box card" :gutter="20">
         <div
           class="title"
         >当前可选课程范围：{{$store.state.department}} | {{$store.state.studentSemester}}课程</div>
-        <el-col :md="12" :lg="8" :xl="6" v-for="item in courseData" :key="item.timeID">
-          <div class="course" @click="choose(item.timeID)" :class="{choose:(item.timeID == chooseCourse)}">
+
+        <el-col :md="12" :lg="8" :xl="6" v-for="item in courseData" :key="item.courseID">
+          <div class="course" @click="choose(item.courseID)" :class="{choose:(item.courseID == chooseCourse)}">
             <div class="group">
               <div class="name">{{item.courseName}}</div>
             </div>
@@ -71,6 +86,18 @@
 export default {
   data() {
     return {
+      input: '',
+      options: [{
+        value: '4',
+        label: '按课程编号'
+      }, {
+        value: '5',
+        label: '按课程名称'
+      }, {
+        value: '6',
+        label: '按教师名称'
+      }],
+      select: '',
       classData: [],
       courseData: [],
       chooseCourseClassData: [],
@@ -80,6 +107,51 @@ export default {
     };
   },
   methods: {
+    searchCourse(select, keyword) {
+      if (select =='4'){
+        this.axios
+                .get("/searchCourseByCourseID?courseID=" + keyword)
+                .then(res => {
+                  console.log("111");
+                  if (res.data.code != 2) {
+                    console.log(res.data.data);
+                    this.courseData = res.data.data;
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                  this.$message("服务器无法连接");
+                });
+      }
+      else if(select =='5'){
+        this.axios
+                .get("/searchCourseByCourseName?courseName=" + keyword)
+                .then(res => {
+                  console.log("333");
+                  if (res.data.code != 2) {
+                    this.courseData = res.data.data;
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                  this.$message("服务器无法连接");
+                });
+      }
+      else{
+        this.axios
+                .get("/searchCourseByTeacherName?teacherName=" + keyword)
+                .then(res => {
+                  if (res.data.code != 2) {
+                    this.courseData = res.data.data;
+                  }
+                })
+                .catch(err => {
+                  console.log(err);
+                  this.$message("服务器无法连接");
+                });
+      }
+
+    },
     getStudentClass() {
       this.axios
         .get("/getStudentClass?studentID=" + this.$store.state.studentID)
@@ -205,7 +277,20 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.choose {
+  .el-select .el-input {
+    width: 130px;
+  }
+  .search-nox{
+    padding: 20px;
+  }
+  .input-with-select .el-input-group__prepend {
+    background-color: #fff;
+  }
+.aa{
+  width:120px;
+}
+
+  .choose {
   background-color: #67c23a !important;
   border-color: #67c23a !important;
   color: white !important;
@@ -218,6 +303,7 @@ export default {
 .main {
   position: relative;
   display: flex;
+
   .course_box {
     flex: 1 1 auto;
     margin-right: 20px !important;

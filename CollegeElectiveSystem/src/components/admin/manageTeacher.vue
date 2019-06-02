@@ -3,11 +3,16 @@
     <h1>管理教师</h1>
     <div class="container">
       <div class="left">
-        <div class="card student" v-for="(item,index) in teacherData" :key="item.id">
+        <div class="card student" v-for="(item,index) in teacherData" :key="item.teacherID">
           <div class="info">
             <div class="name">教师姓名：{{item.teacherName}}</div>
             <div class="account">教师编号：{{item.teacherID}}</div>
+            <div class="account">教师院系：{{item.departmentName}}</div>
+            <div class="account">教师年龄：{{item.teacherAge}}</div>
+            <div class="account">教师简介：{{item.teacherDes}}</div>
+            <div class="account">教师密码：{{item.teacherPwd}}</div>
             <el-button type="danger" size="small" @click="deleteUser(item.teacherID,index)">删除</el-button>
+            <el-button type="success" size="small" @click="modifyUser(item.teacherID,item.teacherName,item.departmentName,item.teacherAge,item.teacherDes,item.teacherPwd)">保存</el-button>
           </div>
           <div class="avant">{{item.teacherName}}</div>
         </div>
@@ -23,25 +28,31 @@
         <div class="add_teacher">
           <div class="title">添加教师</div>
           <el-form :model="form" :rules="rules" ref="form" label-width="80px" label-position="left">
-            <el-form-item label="教师姓名" prop="name">
+            <el-form-item label="教师姓名" prop="teacherName">
               <el-input v-model="form.teacherName"></el-input>
             </el-form-item>
 
-            <el-form-item label="教师编号" prop="account">
+            <el-form-item label="教师编号" prop="teacherID">
               <el-input v-model="form.teacherID"></el-input>
             </el-form-item>
+            <el-form-item label="教师年龄" prop="teacherAge">
+              <el-input v-model="form.teacherAge"></el-input>
+            </el-form-item>
+            <el-form-item label="教师简介" prop="teacherDes">
+              <el-input v-model="form.teacherDes"></el-input>
+            </el-form-item>
 
-            <el-form-item label="密码" prop="password">
+            <el-form-item label="密码" prop="teacherPwd">
               <el-input type="password" v-model="form.teacherPwd"></el-input>
             </el-form-item>
 
-            <el-form-item label="教师系别" prop="departmentName">
+            <el-form-item label="教师系别" prop="department">
               <el-select v-model="form.departmentName" placeholder="请选择" style="width:100%">
                 <el-option
-                  v-for="item in options"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.name"
+                  v-for="item in department"
+                  :key="item.departmentID"
+                  :label="item.departmentName"
+                  :value="item.departmentID"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -72,7 +83,9 @@ export default {
         teacherID: "",
         teacherName: "",
         teacherPwd: "",
-        departmentName: ""
+        departmentName: "",
+        teacherAge: "",
+        teacherDes:""
       },
       rules: {
         teacherID: [
@@ -86,11 +99,43 @@ export default {
         ],
         departmentName: [{ required: true, message: "请填写信息", trigger: "change" }]
       },
-      options: [],
+      department: [],
       value: ""
     };
   },
   methods: {
+    modifyUser(id,tname,dname,age,des,pwd) {
+      this.$confirm("确认修改吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+              .then(() => {
+                this.axios
+                        .post("/modifyTeacher?teacherID="+id
+                                +"teacherName="+tname+"departmentName="+dname
+                                +"teacherAge="+age+"teacherDes="+des
+                                +"teacherPwd="+pwd)
+                        .then(res => {
+                          if (res.data.code == 1) {
+                            this.$message({
+                              type: "success",
+                              message: "保存成功!"
+                            });
+                          }
+                        })
+                        .catch(err => {
+                          console.log(err);
+                          this.$message("服务器无法连接");
+                        });
+              })
+              .catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "操作已取消"
+                });
+              });
+    },
     getTeacherData(callback) {
       this.axios
         .get("/getTeacherData?page=" + this.page)
@@ -124,7 +169,7 @@ export default {
       })
         .then(() => {
           this.axios
-            .get("/deleteUser?teacherID=" + id)
+            .get("/deleteTeacher?teacherID=" + id)
             .then(res => {
               if (res.data.code == 1) {
                 this.total--;
@@ -149,7 +194,7 @@ export default {
         .get("/getDepartment")
         .then(res => {
           if (res.data.code == 1) {
-            this.options = res.data.data;
+            this.department = res.data.data;
           }
         })
         .catch(err => {
@@ -165,10 +210,12 @@ export default {
       })
         .then(() => {
           let obj = this.form;
-          obj.faculty = this.form.departmentName;
+          obj.departmentID = this.form.departmentName;
+          console.log("111");
           this.axios
             .post("/addTeacher", obj)
             .then(res => {
+              console.log(res.data);
               if (res.data.code == 1) {
                 this.$message({
                   type: "success",
@@ -271,7 +318,7 @@ export default {
       margin: -20px;
       margin-top: -10px;
       overflow: hidden;
-      height: 350px;
+      height: 480px;
       .title {
         margin: -20px;
         padding: 20px;

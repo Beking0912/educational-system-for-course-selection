@@ -5,8 +5,8 @@
       <div class="left">
         <div class="title">未结课课程</div>
         <div class="course_box">
-          <div class="col" v-for="item in courseData" :key="item.id">
-            <div class="course" @click="gotoCourseGrade(item.id)">
+          <div class="col" v-for="item in courseData" :key="item.courseID">
+            <div class="course" @click="gotoCourseGrade(item.courseID)">
               <div class="group">
                 <div class="name">{{item.teacherName}}</div>
               </div>
@@ -26,8 +26,8 @@
       <div class="right">
         <div class="title">已结课课程</div>
         <div class="course_box">
-          <div class="col" v-for="item in courseData_finished" :key="item.id">
-            <div class="course" @click="gotoCourseGrade(item.id)">
+          <div class="col" v-for="item in courseData_finished" :key="item.courseID">
+            <div class="course" @click="gotoCourseGrade(item.courseID)">
               <div class="group">
                 <div class="name">{{item.teacherName}}</div>
               </div>
@@ -84,6 +84,7 @@ export default {
         });
     },
     gotoCourseGrade(id) {
+      console.log(id)
       this.$router.push("/teacher/manageGrade/" + id);
     }
   },

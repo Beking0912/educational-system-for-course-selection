@@ -4,7 +4,7 @@
     <div class="card semester" v-for="(item,index) in data" :key="index">
       <div class="title">{{ (index+1).toString() | semester }}</div>
       <el-row :gutter="20">
-        <el-col :xl="6" :lg="8" :md="12" v-for="subItem in item" :key="subItem.id">
+        <el-col :xl="6" :lg="8" :md="12" v-for="subItem in item" :key="subItem.courseID">
           <div class="content">
             <div class="course_name">{{subItem.courseName}} | {{subItem.credit}}学分</div>
             <div class="grade">
@@ -29,11 +29,11 @@ export default {
   methods: {
     getData() {
       for (let i = 1; i <= Number(this.semester); i++) {
-        // TODO: 获取学生成绩
         this.axios
           .get(`/getStudentGrade?studentID=${this.$store.state.studentID}&semester=${i}`)
           .then(res => {
             if (res.data.code == 1) {
+              console.log(res.data)
               this.$set(this.data, i - 1, res.data.data);
             }
           })

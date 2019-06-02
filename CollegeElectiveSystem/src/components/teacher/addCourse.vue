@@ -5,11 +5,17 @@
       <div class="title">填写课程信息：</div>
       <hr>
       <el-form :model="form" ref="form" :rules="rules" label-position="top">
+        <el-form-item label="课程编号" prop="courseID">
+          <el-input v-model="form.courseID" placeholder="请填写该课程的编号"></el-input>
+        </el-form-item>
         <el-form-item label="课程名称" prop="courseName">
           <el-input v-model="form.courseName" placeholder="请填写该课程的名称"></el-input>
         </el-form-item>
         <el-form-item label="课程简介" prop="courseDes">
           <el-input v-model="form.courseDes" placeholder="请填写该课程的简介"></el-input>
+        </el-form-item>
+        <el-form-item label="上课教室" prop="classroom">
+          <el-input v-model="form.classroom" placeholder="请填写该课程上课地点"></el-input>
         </el-form-item>
         <el-col :span="8"></el-col><el-form-item label="学分" prop="credit">
           <el-input-number v-model="form.credit" @change="handleChange" :step="1" :min="1" :max="5"></el-input-number>
@@ -23,7 +29,7 @@
                   v-for="item in semester"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value"
+                  :value="item.label"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -34,9 +40,9 @@
               <el-select v-model="form.departmentName" placeholder="请选择">
                 <el-option
                   v-for="item in department"
-                  :key="item.id"
-                  :label="item.name"
-                  :value="item.id"
+                  :key="item.departmentID"
+                  :label="item.departmentName"
+                  :value="item.departmentID"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -115,16 +121,7 @@ export default {
           label: "大四下学期"
         }
       ],
-      department: [
-        {
-          id: 1,
-          name: "计算机与计算机科学"
-        },
-        {
-          id: 2,
-          name: "软件工程"
-        }
-      ],
+      department: [],//[{"departmentName":"计算机科学系","departmentID":"CS"}],
       rules: {
         courseName: [
           {
@@ -183,9 +180,15 @@ export default {
     },
     addCourse() {
       let obj = this.form;
-      obj.departmentID = this.form.departmentID.toString();
-      obj.semester = this.form.semester.toString();
-      obj.name = this.form.courseName;
+      obj.departmentID = this.form.departmentName;
+      obj.semester = this.form.semester;
+      obj.courseName = this.form.courseName;
+      obj.courseID = this.form.courseID;
+      obj.courseDes = this.form.courseDes;
+      obj.classroom = this.form.classroom;
+      obj.credit = this.form.credit;
+      obj.capacity = this.form.capacity;
+      obj.teacherID = this.form.teacherID;
       console.log(obj);
       this.axios
         .post("/addCourse", obj)

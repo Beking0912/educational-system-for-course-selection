@@ -23,6 +23,10 @@
             <i class="el-icon-setting"></i>
             <span slot="title">管理教师</span>
           </el-menu-item>
+          <el-menu-item index="addDepartment">
+            <i class="el-icon-setting"></i>
+            <span slot="title">管理院系</span>
+          </el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>

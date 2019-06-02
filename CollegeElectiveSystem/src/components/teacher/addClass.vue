@@ -9,11 +9,11 @@
           </div>
           <div class="left_inner">
             <div v-if="courseData.length == 0" style="padding-left: 10px;">请添加课程</div>
-            <div class="inner" v-for="item in courseData" :key="item.timeID">
+            <div class="inner" v-for="item in courseData" :key="item.courseName">
               <div
                 class="course"
-                @click="chooseCourse = item.timeID"
-                :class="{choose:(item.timeID == chooseCourse)}"
+                @click="chooseCourse = item.courseID"
+                :class="{choose:(item.courseID == chooseCourse)}"
               >
                 <div class="group">
                   <div class="name">{{item.courseName}}</div>
@@ -99,7 +99,7 @@ export default {
           courseID: "",
           classroomID: "",
           day: (i + 1) % 11 == 0 ? (i + 1) / 11 : parseInt((i + 1) / 11 + 1),
-          time: (i + 1) % 11 == 0 ? 11 : (i + 1) % 11,
+          time: (i + 1) % 11 == 0 ? 11 : (i + 1) %11,
           classroom: "",
           courseName: "",
           choose: false
@@ -108,7 +108,8 @@ export default {
       for (let i in data) {
         let day = parseInt(data[i].day);
         let time = parseInt(data[i].time);
-        let index = (day - 1) * 4 + time - 1;
+        let index = (day - 1) * 11 + time-1;
+        console.log(day,time,index)
         finalData[index] = data[i];
       }
       return finalData;

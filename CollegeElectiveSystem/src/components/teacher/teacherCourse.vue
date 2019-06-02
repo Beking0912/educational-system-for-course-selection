@@ -25,7 +25,7 @@
         </div>
         <div class="table_content">
           <div class="class" v-for="(item,index) in data" :key="index">
-            <div class="class_inner" v-if="item.id!=''">
+            <div class="class_inner" v-if="item.courseID!=''" @click="deleteCourse(item.courseID, index)">
               <div class="course">{{item.courseName}}</div>
               <div class="class_info">
                 <div class="teacher">
@@ -38,7 +38,7 @@
                 </div>
               </div>
             </div>
-            <div class="no_class" v-if="item.id == ''">无课</div>
+            <div class="no_class" v-if="item.courseID == ''">无课</div>
           </div>
         </div>
       </div>
@@ -69,7 +69,7 @@ export default {
       for (let i in data) {
         let day = parseInt(data[i].day);
         let time = parseInt(data[i].time);
-        let index = (day - 1) * 4 + time - 1;
+        let index = (day - 1) * 11 + time-1 ;
         finalData[index] = data[i];
       }
       return finalData;
@@ -81,6 +81,7 @@ export default {
         .then(res => {
           if (res.data.code == 1) {
             this.data = this.parseData(res.data.data);
+            console.log(this.data);
           }
         })
         .catch(err => {
@@ -95,6 +96,34 @@ export default {
         customClass: "notifys",
         offset: 100
       });
+    },
+    deleteCourse(courseID, index) {
+      this.$confirm("您确定要删除该课程吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+              .then(() => {
+                this.axios
+                        .get("/deleteCourse?&courseID=" + courseID)
+                        .then(res => {
+                          if (res.data.code != 1) {
+                            this.total--;
+                            this.data.splice(index, 1);
+                            this.$message("删除成功！");
+                          }
+                        })
+                        .catch(err => {
+                          console.log(err);
+                          this.$message("服务器无法连接");
+                        });
+              })
+              .catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "操作已取消"
+                });
+              });
     }
   },
   mounted() {
@@ -107,7 +136,6 @@ export default {
 .table_head {
   padding: 20px;
   background-color: #fff;
-  padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   margin-bottom: 20px;
@@ -153,30 +181,31 @@ export default {
       @media screen and (max-width: 1540px) {
         font-size: 14px;
         .course {
-          min-height: 50px !important;
+          /*min-height: 50px !important;*/
           font-size: 1rem !important;
         }
         .class_info {
           display: block !important;
-          line-height: 20px !important;
+          /*line-height: 20px !important;*/
         }
       }
       .class_inner {
         background-color: #e6a23c;
         height: 100%;
         border-radius: 10px;
-        padding: 20px;
+        padding-left: 20px;
+        padding-top: 5px;
         box-sizing: border-box;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
         .course {
           color: white;
           font-size: 1.2rem;
           font-weight: bold;
-          min-height: 65px;
+          /*min-height: 65px;*/
         }
         .class_info {
           display: flex;
-          line-height: 30px;
+          /*line-height: 30px;*/
           color: white;
           .teacher {
             margin-right: 10px;
