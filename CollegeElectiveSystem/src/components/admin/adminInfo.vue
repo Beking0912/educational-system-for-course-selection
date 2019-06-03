@@ -4,7 +4,7 @@
     <div class="identity">
       <span>管理员</span>
     </div>
-    <div class="account">管理员账号：{{$store.state.account}}</div>
+    <div class="account">管理员账号：{{$store.state.adminID}}</div>
   </div>
 </template>
 

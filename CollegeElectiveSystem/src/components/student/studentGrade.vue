@@ -19,56 +19,92 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      semester: this.$store.state.studentSemester,
-      data: []
-    };
-  },
-  methods: {
-    getData() {
-      for (let i = 1; i <= Number(this.semester); i++) {
-        this.axios
-          .get(`/getStudentGrade?studentID=${this.$store.state.studentID}&semester=${i}`)
-          .then(res => {
-            if (res.data.code == 1) {
-              console.log(res.data)
-              this.$set(this.data, i - 1, res.data.data);
+  export default {
+    data() {
+      return {
+        semester: '',
+        data: [
+          [
+            {
+              courseID: "2",
+              courseName: "课程名",
+              grade: "100",
+              credit: "2"
             }
-          })
-          .catch(err => {
-            console.log(err);
-            this.$message("服务器无法连接，成绩获取失败");
-          });
+          ]
+        ]
+      };
+    },
+    methods: {
+      getSemester(value) {
+        switch (value) {
+          case "大一上学期":
+            return "1";
+          case "大一下学期":
+            return "2";
+          case "大二上学期":
+            return "3";
+          case "大二下学期":
+            return "4";
+          case "大三上学期":
+            return "5";
+          case "大三下学期":
+            return "6";
+          case "大四上学期":
+            return "7";
+          case "大四下学期":
+            return "8";
+        }
+      },
+      getData() {
+        console.log(this.$store.state);
+        for (let i = 1; i <= Number(this.semester); i++) {
+          this.axios
+                  .get(
+                          `/getStudentGrade?studentID=${
+                                  this.$store.state.studentID
+                                  }&semester=${i}`
+                  )
+                  .then(res => {
+                    if (res.data.code == 1) {
+                      console.log(res.data);
+                      this.$set(this.data, i - 1, res.data.data);
+                    }
+                  })
+                  .catch(err => {
+                    console.log(err);
+                    this.$message("服务器无法连接，成绩获取失败");
+                  });
+        }
       }
+    },
+    mounted() {
+      this.semester = +this.getSemester(this.$store.state.studentSemester);
+      this.getData();
     }
-  },
-  mounted() {
-    this.getData();
-  }
-};
+  };
 </script>
 
 <style lang='scss' scoped>
-.semester {
-  .title {
-    padding-bottom: 20px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  .content {
-    background-color: #409eff;
-    padding: 20px;
-    border-radius: 10px;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-    .course_name {
-      font-weight: bold;
-      padding-right: 10px;
+  .semester {
+    .title {
+      padding-bottom: 20px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      color: black;
+    }
+    .content {
+      background-color: #409eff;
+      padding: 20px;
+      border-radius: 10px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      .course_name {
+        font-weight: bold;
+        padding-right: 10px;
+      }
     }
   }
-}
 </style>

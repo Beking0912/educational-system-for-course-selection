@@ -32,7 +32,7 @@
       </div>
       <div class="right">
         <ve-pie :data="chartData"></ve-pie>
-        <el-button type="danger" v-if="courseInfo.status == 1" @click="finishedCourse">课程结课</el-button>
+        <el-button type="danger" v-if="courseInfo.status == 'unfinished'" @click="finishedCourse">课程结课</el-button>
       </div>
     </div>
   </div>
@@ -155,7 +155,7 @@ export default {
           this.axios
             .get("/finishedCourse?courseID=" + this.$route.params.courseID)
             .then(res => {
-              if (res.data.code == 1) {
+              if (res.data.code != 0) {
                 this.$router.push("/teacher/manageGrade");
               }
             })

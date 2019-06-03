@@ -9,6 +9,14 @@
       :label-position="'left'"
       ref="registerForm"
     >
+      <el-form-item prop="roles">
+        <el-radio-group v-model="radio" >
+          <el-radio :label="3" >学生</el-radio>
+          <el-radio :label="6" >教师</el-radio>
+          <el-radio :label="9" >管理员</el-radio>
+        </el-radio-group>
+      </el-form-item>
+
       <el-form-item label="账号" prop="account">
         <el-input v-model="registerForm.account"></el-input>
       </el-form-item>

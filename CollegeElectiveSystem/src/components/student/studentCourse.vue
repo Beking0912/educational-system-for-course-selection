@@ -65,7 +65,7 @@ export default {
       for (let i in data) {
         let day = parseInt(data[i].day);
         let time = parseInt(data[i].time);
-        let index = (day - 1) * 4 + time - 1;
+        let index = (day - 1) * 11 + time - 1;
         finalData[index] = data[i];
       }
       return finalData;

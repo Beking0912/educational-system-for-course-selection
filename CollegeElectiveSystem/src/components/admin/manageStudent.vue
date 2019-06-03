@@ -1,6 +1,43 @@
 <template>
   <div id="manageStudent">
     <h1>管理学生</h1>
+    <el-dialog title="学生信息" :visible.sync="dialogFormVisible">
+      <el-form :model="editItem" class="fromteacher">
+        <el-form-item label="学生姓名">
+          <el-input v-model="editItem.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="学生学号">
+          <el-input v-model="editItem.studentID" :disabled="true" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="所在院系">
+          <el-select v-model="editItem.departmentName" placeholder="请选择" style="width:100%">
+            <el-option
+                    v-for="item in department"
+                    :key="item.departmentID"
+                    :label="item.departmentName"
+                    :value="item.departmentID"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="在读学期">
+          <el-select v-model="editItem.studentSemester" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in a"
+              :key="item.id"
+              :label="item.name"
+              :value="item.name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="学生密码">
+          <el-input v-model="editItem.studentPwd" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="modifyUser(editItem.studentID,editItem.name,editItem.departmentName,editItem.studentSemester,editItem.studentPwd)">保存</el-button>
+      </div>
+    </el-dialog>
     <div class="container">
       <div class="left">
         <div class="card student" v-for="(item,index) in studentData" :key="item.studentID">
@@ -16,6 +53,8 @@
               style="background: #7266ba; border-color: #7266ba"
               @click="deleteUser(item.studentID,index)"
             >删除</el-button>
+            <el-button @click="onEdit(item)" type="success" size="small" :class="{choose:item.choose}">编辑</el-button>
+
           </div>
           <div class="avant">{{item.name}}</div>
         </div>
@@ -72,6 +111,40 @@
 export default {
   data() {
     return {
+      a:[
+        {
+          id:'1',
+          name:'大一上学期'
+        },
+        {
+          id:'2',
+          name:'大一下学期'
+        },
+        {
+          id:'3',
+          name:'大二上学期'
+        },
+        {
+          id:'4',
+          name:'大二下学期'
+        },
+        {
+          id:'5',
+          name:'大三上学期'
+        },
+        {
+          id:'6',
+          name:'大三下学期'
+        },
+        {
+          id:'7',
+          name:'大四上学期'
+        },
+        {
+          id:'8',
+          name:'大四下学期'
+        }
+      ],
       studentData: [],
       chartData: {
         columns: ["用户", "数量"],
@@ -82,8 +155,16 @@ export default {
       form: {
         studentID: "",
         name: "",
-        studentSemester: "",
         departmentName: "",
+        studentSemester: "",
+        studentPwd: ""
+      },
+      dialogFormVisible: false,
+      editItem: {
+        studentID: "",
+        name: "",
+        departmentName: "",
+        studentSemester: "",
         studentPwd: ""
       },
       rules: {
@@ -105,11 +186,48 @@ export default {
     };
   },
   methods: {
+    onEdit(item) {
+      console.log("adf:");
+      this.dialogFormVisible = true;
+      this.editItem = item;
+    },
+    modifyUser() {
+      this.$confirm("确认修改吗?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+              .then(() => {
+                let obj = this.editItem;
+                  obj.studentSemester = this.getSemester(obj.studentSemester);
+                  this.axios
+                        .post("/modifyStudentInfo" ,obj)
+                        .then(res => {
+                          if (res.data.code == 1) {
+                            this.$message({
+                              type: "success",
+                              message: "保存成功!"
+                            });
+
+                          }
+                        })
+                        .catch(err => {
+                          console.log(err);
+                          this.$message("服务器无法连接");
+                        });
+              })
+              .catch(() => {
+                this.$message({
+                  type: "info",
+                  message: "操作已取消"
+                });
+              });
+      this.dialogFormVisible = false;
+    },
     getStudentData(callback) {
       this.axios
         .get("/getStudentData?page=" + this.page)
         .then(res => {
-          console.log(this.page)
           if (res.data.code == 1) {
             this.total = res.data.total;
             this.studentData = [
@@ -167,7 +285,6 @@ export default {
               });
     },
     getDepartment() {
-      console.log('11111')
       this.axios
               .get("/getDepartment")
               .then(res => {
@@ -227,12 +344,33 @@ export default {
     },
     clearForm() {
       this.$refs.form.resetFields();
+    },
+    getSemester(value) {
+      switch (value) {
+        case "大一上学期":
+          return "1";
+        case "大一下学期":
+          return "2";
+        case "大二上学期":
+          return "3";
+        case "大二下学期":
+          return "4";
+        case "大三上学期":
+          return "5";
+        case "大三下学期":
+          return "6";
+        case "大四上学期":
+          return "7";
+        case "大四下学期":
+          return "8";
+      }
     }
   },
   mounted() {
+    this.studentSemester = this.getSemester(this.editItem.semester);
     this.getStudentData(() => {
-      this.chartData.rows[0].数量 = this.studentData.length;
-      this.chartData.rows[1].数量 = this.total - this.studentData.length;
+       this.chartData.rows[0].数量 = this.studentData.length;
+       this.chartData.rows[1].数量 = this.total - this.studentData.length;
     });
     this.getDepartment();
   }

@@ -32,8 +32,10 @@
             <div class="group">
               <div class="credit">{{item.teacherName}}</div>
               <div class="credit">{{item.credit}}学分</div>
-              <div class="departmentName">{{item.department}}</div>
-              <div class="departmentName">{{item.classroom}}</div>
+              <div class="departmentName">{{item.departmentName}}</div>
+              <div class="departmentName">&nbsp;&nbsp;{{item.classroom}}</div>
+              <div class="departmentName">&nbsp;&nbsp;总量:{{item.capacity}}</div>
+
             </div>
           </div>
         </el-col>
@@ -112,32 +114,30 @@ export default {
         this.axios
                 .get("/searchCourseByCourseID?courseID=" + keyword)
                 .then(res => {
-                  console.log("111");
                   if (res.data.code != 2) {
-                    console.log(res.data.data);
                     this.courseData = res.data.data;
+                    console.log(this.courseData)
                   }
                 })
                 .catch(err => {
                   console.log(err);
-                  this.$message("服务器无法连接");
+                  this.$message("查询失败，该课程不存在请重新输入！");
                 });
       }
       else if(select =='5'){
         this.axios
                 .get("/searchCourseByCourseName?courseName=" + keyword)
                 .then(res => {
-                  console.log("333");
                   if (res.data.code != 2) {
                     this.courseData = res.data.data;
                   }
                 })
                 .catch(err => {
                   console.log(err);
-                  this.$message("服务器无法连接");
+                  this.$message("查询失败，该课程不存在请重新输入！");
                 });
       }
-      else{
+      else if(select =='6'){
         this.axios
                 .get("/searchCourseByTeacherName?teacherName=" + keyword)
                 .then(res => {
@@ -147,8 +147,11 @@ export default {
                 })
                 .catch(err => {
                   console.log(err);
-                  this.$message("服务器无法连接");
+                  this.$message("查询失败，该课程不存在请重新输入！");
                 });
+      }
+      else {
+        this.$message("查询失败，该课程不存在请重新输入！");
       }
 
     },
