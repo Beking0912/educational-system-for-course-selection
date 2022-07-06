@@ -1,6 +1,4 @@
 # ElectiveCourseSystem
-课程项目-学生选课教务系统-前端代码（含学生选课端、教师开课端、管理员端）
+**[Course Project: Web design and development]** The front-end code of the **Educational Administration System for Course Selection**, including three user permissions: student course selection end, teacher course opening end, and administrator end.
 
-主要技术栈：vue + webpack + vue-cli + element
-
-主要负责写前端 完整项目见：https://github.com/zk31601102/ElectiveCourseSystem
+**Main technology stack：JavaScript + Vue + Webpack + Vue-cli + Element**
